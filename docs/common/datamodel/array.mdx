@@ -9,13 +9,13 @@ import SnippetGroup from '@site/src/components/SnippetGroup';
 
 
 :::warning
-### You might want to use a Map instead
-Ditto is a distributed database. Distributed databases work really well with
-stable ids. Arrays are really challenging to use, because items are referenced
-by their index. Indexes can change, which means indexes are not stable
-identifiers. Two peers can see different values for the same index.
+### Deprecated
 
-If you're having trouble with duplicate data, you may want to use a [map](../datamodel/map) instead. 
+Growable Arrays are deprecated in Ditto 2.0, and will be out of maintenance in
+Ditto 3.0, which means that you will not be able to syncronize them with the Big
+Peer. Please use a [map](../datamodel/map) or [register](../datamodel/register) instead. 
+
+If you're interested in this feature or need support migrating to a map or register, [please contact us](mailto:contact@ditto.live).
 :::
 
 Arrays are an ordered list of values. Arrays can contain all primitive
@@ -30,7 +30,7 @@ values as well as nested collection types like other Arrays or Maps.
 
 If two devices `push` this data, both devices will see `["Susan", "Susan"]`.
 
-## When do I use an array?
+## When do I use a growable array?
 
 
 ### Text editing
