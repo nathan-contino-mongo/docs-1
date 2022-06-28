@@ -71,6 +71,7 @@ module.exports = function (opts) {
       },
       "common/supported-platforms",
       "common/faq",
+      "common/v2",
     ]
   }
 }
