@@ -73,13 +73,13 @@ flightIds.forEach {
   try! collection.upsert([
       "_id": $0,
       "name": "Flight ABC123",
-      "orderedCount": Counter(),
+      "orderedCount": DittoCounter(),
       "totalAvailable": 300
   ], writeStrategy: .insertDefaultIfAbsent)
 }
 ```
 
-When we call `Counter()`, the counter `orderedCount` is initialized to 0.
+When we call `DittoCounter()`, the counter `orderedCount` is initialized to 0.
 `totalAvailable` is a [Register](../datamodel/register) value that doesn't change unless we update it
 later. 
 
@@ -133,7 +133,7 @@ encounter unexpected behavior. Proceed with caution.
 
 ```swift
 let docID = try! ditto.store["drinks"].upsert([
-    usedCount: Counter(),
+    usedCount: DittoCounter(),
 ])
 
 ditto.store["drinks"].findByID(docID).update { mutableDoc in
@@ -153,7 +153,7 @@ ditto.store["drinks"].findByID(docID).update { mutableDoc in
 }
 
 let docID = try! ditto.store["drinks"].findById(docID).upsert([
-    usedCount: Counter(),
+    usedCount: DittoCounter(),
 ])
 
 print(ditto.store["drinks"].findByID(docID)) // {usedCount: 0}
