@@ -91,7 +91,7 @@ the Plus button:
 ```swift
 .onPlusDidClick {
     seatDocument.update { doc in
-        doc?["orderedCount"].increment(amount: 1)
+        doc?["orderedCount"].counter?.increment(by: 1)
     }
 }
 ```
@@ -137,13 +137,13 @@ let docID = try! ditto.store["drinks"].upsert([
 ])
 
 ditto.store["drinks"].findByID(docID).update { mutableDoc in
-    mutableDoc?["usedCount"].increment(amount: 11)
+    mutableDoc?["usedCount"].counter?.increment(by: 11)
 }
 
 print(ditto.store["drinks"].findByID(docID)) // {usedCount: 11}
 
 ditto.store["drinks"].findByID(docID).update { mutableDoc in
-    mutableDoc?["usedCount"].increment(amount: 10)
+    mutableDoc?["usedCount"].counter?.increment(by: 10)
 }
 
 print(ditto.store["drinks"].findByID(docID)) // {usedCount: 21}
@@ -159,7 +159,7 @@ let docID = try! ditto.store["drinks"].findById(docID).upsert([
 print(ditto.store["drinks"].findByID(docID)) // {usedCount: 0}
 
 ditto.store["drinks"].findByID(docID).update { mutableDoc in
-    mutableDoc?["usedCount"].increment(amount: 1)
+    mutableDoc?["usedCount"].counter?.increment(by: 1)
 }
 
 print(ditto.store["drinks"].findByID(docID)) // {usedCount: 1}
