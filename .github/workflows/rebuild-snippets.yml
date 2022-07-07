@@ -4,6 +4,7 @@ on:
   # Whenever there is a new `ditto` release and, with it, an update of the `releases.json` file.
   repository_dispatch:
     types: ['new-ditto-release']
+  workflow_dispatch:
 
 jobs:
   create-pull-request:
@@ -12,28 +13,32 @@ jobs:
     environment: rebuild-snippets
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: webfactory/ssh-agent@v0.5.0
         with:
-          node-version: '14.x'
-      - name: Checkout ditto repository
-        uses: actions/checkout@v3
-        with:
-          repository: getditto/ditto
-          token: ${{ secrets.GH_PAT }} 
-          path: ditto
+          ssh-private-key: ${{ secrets.GH_PAGES_DEPLOY }}
       - name: wget
         uses: wei/wget@v1
         with:
           args: -qO- https://software.ditto.live/releases/snippets.json > snippets.json
-      - run: npm i
-      - run: git add snippets.json
-      - run: git commit -m "Update snippets from latest ditto release" 
-      - uses: repo-sync/pull-request@v2
-        name: pull-request
+      - name: Run the Action
+        uses: devops-infra/action-commit-push@master
         with:
-          destination_branch: "main"
-          pr_title: "Updating snippets from latest ditto release"
-          pr_body: "👑 *An automated PR*"
-          pr_reviewer: "okdistribute"
-          pr_draft: false
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GH_PAT }}
+          add_timestamp: true
+          commit_prefix: "[AUTO]"
+          commit_message: "Updating snippets"
+          force: false
+          target_branch: update-snippets
+      - name: Run the Action
+        uses: devops-infra/action-pull-request@v0.4.2
+        with:
+          github_token: ${{ secrets.GH_PAT }}
+          target_branch: main
+          title: Update Snippets
+          body: "**Automated pull request**"
+          reviewer: okdistribute
+          assignee: okdistribute
+          draft: false
+          new_string: "** Automatic pull request**"
+          get_diff: true
+          ignore_users: "dependabot"
